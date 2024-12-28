@@ -1,0 +1,93 @@
+`discord.js`에서 `Interaction` 객체는 사용자가 봇과 상호작용할 때 발생하는 이벤트에 대한 정보를 담고 있습니다. 이는 주로 버튼 클릭, 선택 메뉴, 슬래시 명령어 등과 같은 사용자 상호작용을 처리하는 데 사용됩니다. `Interaction` 객체의 주요 속성과 메서드는 다음과 같습니다.
+
+### 주요 속성
+
+1. **id**: 상호작용의 고유 ID입니다.
+   ```javascript
+   console.log(interaction.id);
+   ```
+
+2. **type**: 상호작용의 유형. 예를 들어, `APPLICATION_COMMAND`, `MESSAGE_COMPONENT`, `APPLICATION_COMMAND_AUTOCOMPLETE` 등이 있습니다.
+   ```javascript
+   console.log(interaction.type);
+   ```
+
+3. **data**: 상호작용에 대한 추가 데이터. 예를 들어, 명령어의 이름, 선택된 옵션 등을 포함합니다.
+   ```javascript
+   console.log(interaction.data);
+   ```
+
+4. **guildId**: 상호작용이 발생한 길드의 ID입니다. DM에서 발생한 상호작용인 경우 `null`입니다.
+   ```javascript
+   console.log(interaction.guildId);
+   ```
+
+5. **channelId**: 상호작용이 발생한 채널의 ID입니다.
+   ```javascript
+   console.log(interaction.channelId);
+   ```
+
+6. **member**: 길드에서 상호작용을 발생시킨 사용자의 멤버 정보 (GuildMember 객체).
+   ```javascript
+   console.log(interaction.member);
+   ```
+
+7. **user**: 상호작용을 발생시킨 사용자 (User 객체).
+   ```javascript
+   console.log(interaction.user.username);
+   ```
+
+8. **token**: 상호작용을 확인하는 데 사용되는 토큰입니다. 이 토큰은 응답 메시지를 보내는 데 필요합니다.
+   ```javascript
+   console.log(interaction.token);
+   ```
+
+9. **deferred**: 이 상호작용이 지연된 상태인지 여부 (boolean).
+   ```javascript
+   console.log(interaction.deferred);
+   ```
+
+10. **responded**: 상호작용에 대한 응답이 이루어졌는지 여부 (boolean).
+    ```javascript
+    console.log(interaction.responded);
+    ```
+
+### 주요 메서드
+
+- **reply()**: 상호작용에 대한 응답 메시지를 보냅니다.
+  ```javascript
+  interaction.reply("응답 메시지입니다.");
+  ```
+
+- **deferReply()**: 응답을 지연시킵니다. 이 메서드를 사용하면 비동기 작업을 수행하는 동안 사용자에게 로딩 상태를 보여줄 수 있습니다.
+  ```javascript
+  interaction.deferReply();
+  ```
+
+- **editReply()**: 상호작용에 대한 응답 메시지를 수정합니다.
+  ```javascript
+  interaction.editReply("수정된 응답입니다.");
+  ```
+
+- **followUp()**: 응답 후 추가 메시지를 보냅니다.
+  ```javascript
+  interaction.followUp("추가 메시지입니다.");
+  ```
+
+### 예제
+
+```javascript
+client.on('interactionCreate', async (interaction) => {
+    if (!interaction.isCommand()) return;
+
+    const { commandName } = interaction;
+
+    if (commandName === 'ping') {
+        await interaction.reply('Pong!');
+    } else if (commandName === 'button') {
+        await interaction.deferReply();
+        // 비동기 작업 수행 후
+        await interaction.editReply('버튼 클릭 후 수정된 응답입니다.');
+    }
+});
+```

@@ -1,0 +1,127 @@
+`discord.js`에서 `Interaction` 객체는 여러 종류가 있으며, 각 종류는 특정한 사용자 상호작용을 나타냅니다. 아래는 주요 상호작용의 종류와 이를 생성하는 예제를 설명하겠습니다.
+
+### 1. Application Command Interaction
+
+**설명**: 슬래시 명령어를 통해 발생하는 상호작용입니다. 사용자가 슬래시 명령어를 입력하면 이 상호작용이 발생합니다.
+
+**예제**:
+```javascript
+client.on('interactionCreate', async (interaction) => {
+    if (interaction.isCommand()) {
+        const { commandName } = interaction;
+
+        if (commandName === 'ping') {
+            await interaction.reply('Pong!');
+        }
+    }
+});
+```
+
+### 2. Message Component Interaction
+
+**설명**: 버튼이나 선택 메뉴와 같은 메시지 컴포넌트를 클릭할 때 발생하는 상호작용입니다.
+
+**예제**:
+```javascript
+client.on('interactionCreate', async (interaction) => {
+    if (interaction.isButton()) {
+        await interaction.reply('버튼이 클릭되었습니다!');
+    } else if (interaction.isSelectMenu()) {
+        await interaction.reply(`선택한 값: ${interaction.values[0]}`);
+    }
+});
+```
+
+### 3. Autocomplete Interaction
+
+**설명**: 슬래시 명령어의 자동 완성을 위한 상호작용입니다. 사용자가 명령어를 입력할 때 자동으로 제안할 항목을 제공하는 데 사용됩니다.
+
+**예제**:
+```javascript
+client.on('interactionCreate', async (interaction) => {
+    if (interaction.isCommand() && interaction.commandName === 'example') {
+        const focusedOption = interaction.options.getFocused();
+        const choices = ['choice1', 'choice2', 'choice3'];
+        const filtered = choices.filter(choice => choice.startsWith(focusedOption));
+
+        await interaction.respond(filtered.map(choice => ({ name: choice, value: choice })));
+    }
+});
+```
+
+### 4. Modal Interaction (Discord.js v14.3.0 이상)
+
+**설명**: 모달을 통해 사용자에게 입력을 받을 수 있는 상호작용입니다. 사용자가 모달을 제출하면 이 상호작용이 발생합니다.
+
+**예제**:
+```javascript
+client.on('interactionCreate', async (interaction) => {
+    if (interaction.isModalSubmit()) {
+        const inputValue = interaction.fields.getTextInputValue('inputFieldId');
+        await interaction.reply(`입력된 값: ${inputValue}`);
+    }
+});
+```
+
+### 상호작용을 생성하는 방법
+
+슬래시 명령어와 메시지 컴포넌트를 등록하려면 다음의 과정을 따라야 합니다.
+
+1. **슬래시 명령어 등록**:
+```javascript
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v9');
+
+const commands = [
+    {
+        name: 'ping',
+        description: 'Pong!',
+    },
+    {
+        name: 'example',
+        description: 'Example command with autocomplete.',
+        options: [
+            {
+                type: 'STRING',
+                name: 'input',
+                description: 'Your input',
+                required: true,
+                autocomplete: true,
+            },
+        ],
+    },
+];
+
+const rest = new REST({ version: '9' }).setToken('YOUR_BOT_TOKEN');
+
+(async () => {
+    try {
+        console.log('Started refreshing application (/) commands.');
+
+        await rest.put(
+            Routes.applicationCommands('YOUR_CLIENT_ID'),
+            { body: commands },
+        );
+
+        console.log('Successfully reloaded application (/) commands.');
+    } catch (error) {
+        console.error(error);
+    }
+})();
+```
+
+2. **버튼 추가**:
+```javascript
+const { MessageActionRow, MessageButton } = require('discord.js');
+
+const row = new MessageActionRow()
+    .addComponents(
+        new MessageButton()
+            .setCustomId('button1')
+            .setLabel('Click me!')
+            .setStyle('PRIMARY'),
+    );
+
+// 메시지 전송 시 버튼 포함
+channel.send({ content: '여기를 클릭하세요!', components: [row] });
+```

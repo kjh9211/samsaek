@@ -1,0 +1,162 @@
+아래는 `discord.js`의 `Message` 객체에 대한 속성을 중복 없이 정리하고, 각 속성에 대한 간단한 예제를 포함한 목록입니다.
+
+### `Message` 객체의 속성 및 예제
+
+1. **content**: 메시지의 내용 (텍스트).
+   ```javascript
+   console.log(message.content);
+   ```
+
+2. **author**: 메시지를 작성한 사용자 (User 객체).
+   ```javascript
+   console.log(message.author.username);
+   ```
+
+3. **channel**: 메시지가 속한 채널 (TextChannel, DMChannel 등).
+   ```javascript
+   console.log(message.channel.name);
+   ```
+
+4. **guild**: 메시지가 속한 길드 (Guild 객체).
+   ```javascript
+   console.log(message.guild.name);
+   ```
+
+5. **id**: 메시지의 고유 ID.
+   ```javascript
+   console.log(message.id);
+   ```
+
+6. **createdTimestamp**: 메시지가 생성된 시간의 타임스탬프.
+   ```javascript
+   console.log(message.createdTimestamp);
+   ```
+
+7. **createdAt**: 메시지가 생성된 시간 (Date 객체).
+   ```javascript
+   console.log(message.createdAt);
+   ```
+
+8. **editedTimestamp**: 메시지가 수정된 시간의 타임스탬프 (수정되지 않았다면 `null`).
+   ```javascript
+   console.log(message.editedTimestamp);
+   ```
+
+9. **editedAt**: 메시지가 수정된 시간 (수정되지 않았다면 `null`, Date 객체).
+   ```javascript
+   console.log(message.editedAt);
+   ```
+
+10. **attachments**: 메시지에 첨부된 파일들 (Collection).
+    ```javascript
+    message.attachments.forEach(attachment => {
+        console.log(attachment.url);
+    });
+    ```
+
+11. **embeds**: 메시지에 포함된 임베드 객체들 (배열).
+    ```javascript
+    console.log(message.embeds);
+    ```
+
+12. **mentions**: 멘션된 사용자 및 역할 (Mentions 객체).
+    ```javascript
+    console.log(message.mentions.users);
+    ```
+
+13. **reactions**: 메시지에 추가된 반응들 (Collection).
+    ```javascript
+    message.reactions.cache.forEach(reaction => {
+        console.log(reaction.emoji.name);
+    });
+    ```
+
+14. **tts**: 메시지가 텍스트 음성 변환(TTS)인지 여부.
+    ```javascript
+    console.log(message.tts);
+    ```
+
+15. **pinned**: 메시지가 고정되었는지 여부.
+    ```javascript
+    console.log(message.pinned);
+    ```
+
+16. **nonce**: 메시지 전송 시의 nonce 값 (Discord의 메시지 식별용).
+    ```javascript
+    console.log(message.nonce);
+    ```
+
+17. **flags**: 메시지의 플래그 상태 (예: `MESSAGE_FLAGS`).
+    ```javascript
+    console.log(message.flags);
+    ```
+
+18. **webhookId**: 메시지가 웹후크를 통해 전송된 경우의 웹후크 ID.
+    ```javascript
+    console.log(message.webhookId);
+    ```
+
+19. **interaction**: 메시지가 상호작용을 통해 생성된 경우의 Interaction 객체.
+    ```javascript
+    console.log(message.interaction);
+    ```
+
+20. **client**: 메시지를 보낸 클라이언트 객체.
+    ```javascript
+    console.log(message.client.user.username);
+    ```
+
+21. **components**: 메시지에 포함된 컴포넌트 (예: 버튼, 선택 메뉴 등).
+    ```javascript
+    console.log(message.components);
+    ```
+
+22. **reference**: 이 메시지가 참조하고 있는 다른 메시지 (Message 객체).
+    ```javascript
+    if (message.reference) {
+        console.log(message.reference.messageId);
+    }
+    ```
+
+23. **stickerItems**: 메시지에 포함된 스티커들.
+    ```javascript
+    console.log(message.stickerItems);
+    ```
+
+24. **type**: 메시지의 유형 (예: 일반 메시지, 시스템 메시지 등).
+    ```javascript
+    console.log(message.type);
+    ```
+
+25. **member**: 메시지를 작성한 사용자의 길드 멤버 정보 (GuildMember 객체).
+    ```javascript
+    console.log(message.member.displayName);
+    ```
+
+### 주요 메서드 예제
+
+- **delete()**: 메시지를 삭제합니다.
+  ```javascript
+  message.delete().then(() => {
+      console.log("메시지가 삭제되었습니다.");
+  });
+  ```
+
+- **edit(content)**: 메시지를 수정합니다.
+  ```javascript
+  message.edit("수정된 메시지 내용").then(() => {
+      console.log("메시지가 수정되었습니다.");
+  });
+  ```
+
+- **reply(content)**: 해당 메시지에 대한 응답 메시지를 보냅니다.
+  ```javascript
+  message.reply("이 메시지에 대한 응답입니다.");
+  ```
+
+- **react(emoji)**: 메시지에 이모지를 추가합니다.
+  ```javascript
+  message.react("👍").then(() => {
+      console.log("반응이 추가되었습니다.");
+  });
+  ```
